@@ -1,0 +1,27 @@
+{
+  "name": "contact-directory",
+  "version": "1.0.0",
+  "description": "Contact Directory Project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NicolasV99/contact-directory.git"
+  },
+  "author": "Nicolas Velasquez, Sariah Wandler",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NicolasV99/contact-directory/issues"
+  },
+  "homepage": "https://github.com/NicolasV99/contact-directory#readme",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongodb": "^6.13.0",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
