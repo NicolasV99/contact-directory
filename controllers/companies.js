@@ -1,5 +1,6 @@
 //const { application } = require('express');
 const mongodb = require('../data/database');
+const { insertContact } = require('./contacts');
 const ObjetcId = require('mongodb').ObjectId;
 
 
@@ -47,6 +48,15 @@ const createCompany = async (req, res) => {
         };
         const response = await mongodb.getDatabase().db().collection('companies').insertOne(company);
         if (response.acknowledged) {
+            const contact = {
+                body: {
+                    name: company.name,
+                    phone: company.phone,
+                    email: company.email,
+                    type: 'company',
+                }
+            };
+            await insertContact(contact);
             res.status(204).send();
         } else {
             res.status(500).json(response.error || 'Some error ocurred while updating the company');
@@ -98,11 +108,26 @@ const deleteCompany = async(req, res) => {
     }
 };
 
+const findByType = async (req, res) => {
+    //#swagger.tags=['Companies']
+    try {
+        const type = req.params.type;
+        const query = { type: type }; // Create a query object based on type field being a string
+        const result = await mongodb.getDatabase().db().collection('companies').find(query).toArray();
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: 'Some error occurred while retrieving the companies' });
+    }
+};
+
 
 module.exports = {
     getAll,
     getSingle,
     createCompany,
     updateCompany,
-    deleteCompany
+    deleteCompany,
+    findByType
 };
