@@ -5,7 +5,7 @@
     "description": "Contact Directory Api",
     "version": "1.0.0"
   },
-  "host": "https://contact-directory-zr0t.onrender.com/",
+  "host": "contact-directory-17pq.onrender.com",
   "basePath": "/",
   "schemes": [
     "https"

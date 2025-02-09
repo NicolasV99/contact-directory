@@ -1,6 +1,7 @@
 //const { application } = require('express');
 const mongodb = require('../data/database');
-const ObjetcId = require('mongodb').ObjectId;
+const { insertContact } = require('./contacts');
+const ObjectId = require('mongodb').ObjectId;
 
 
 // Functions for Companies
@@ -21,7 +22,7 @@ const getAll = async (req, res) => {
 const getSingle = async (req, res) => {
     //#swagger.tags=['Companies']
     try {
-        const userId = new ObjetcId(req.params.id);
+        const userId = new ObjectId(req.params.id);
         const result = await mongodb.getDatabase().db().collection('companies').find({ _id: userId});
         result.toArray().then((companies) => {
             res.setHeader('Content-Type', 'application/json');
@@ -47,6 +48,15 @@ const createCompany = async (req, res) => {
         };
         const response = await mongodb.getDatabase().db().collection('companies').insertOne(company);
         if (response.acknowledged) {
+            const contact = {
+                body: {
+                    name: company.name,
+                    phone: company.phone,
+                    email: company.email,
+                    type: 'company',
+                }
+            };
+            await insertContact(contact);
             res.status(204).send();
         } else {
             res.status(500).json(response.error || 'Some error ocurred while updating the company');
@@ -60,7 +70,7 @@ const createCompany = async (req, res) => {
 const updateCompany = async (req, res) => {
     //#swagger.tags=['Companies']
     try {
-        const userId = new ObjetcId(req.params.id);
+        const userId = new ObjectId(req.params.id);
         const company = {
             name: req.body.name,
             phone: req.body.phone,   
@@ -85,7 +95,7 @@ const updateCompany = async (req, res) => {
 const deleteCompany = async(req, res) => {
     //#swagger.tags=['Companies']
     try {
-        const userId = new ObjetcId(req.params.id);
+        const userId = new ObjectId(req.params.id);
         const response = await mongodb.getDatabase().db().collection('companies').deleteOne({ _id: userId});
         if (response.deletedCount > 0) {
             res.status(204).send();
@@ -98,11 +108,26 @@ const deleteCompany = async(req, res) => {
     }
 };
 
+const findByType = async (req, res) => {
+    //#swagger.tags=['Companies']
+    try {
+        const type = req.params.type;
+        const query = { type: type }; // Create a query object based on type field being a string
+        const result = await mongodb.getDatabase().db().collection('companies').find(query).toArray();
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: 'Some error occurred while retrieving the companies' });
+    }
+};
+
 
 module.exports = {
     getAll,
     getSingle,
     createCompany,
     updateCompany,
-    deleteCompany
+    deleteCompany,
+    findByType
 };
