@@ -22,7 +22,7 @@ const getAll = async (req, res) => {
 const getSingle = async (req, res) => {
     //#swagger.tags=['Employees']
     try {
-        const userId = new ObjetcId(req.params.id);
+        const userId = new ObjectId(req.params.id);
         const result = await mongodb.getDatabase().db().collection('employees').find({ _id: userId});
         result.toArray().then((employees) => {
             res.setHeader('Content-Type', 'application/json');
@@ -123,7 +123,7 @@ const updateEmployeeDepartment = async(req, res) => {
 const deleteEmployee = async(req, res) => {
     //#swagger.tags=['Employees']
     try {
-        const userId = new ObjetcId(req.params.id);
+        const userId = new ObjectId(req.params.id);
         const response = await mongodb.getDatabase().db().collection('employees').deleteOne({ _id: userId});
         if (response.deletedCount > 0) {
             res.status(204).send();

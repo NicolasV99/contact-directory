@@ -1,7 +1,7 @@
 //const { application } = require('express');
 const mongodb = require('../data/database');
 const { insertContact } = require('./contacts');
-const ObjetcId = require('mongodb').ObjectId;
+const ObjectId = require('mongodb').ObjectId;
 
 
 // Functions for Companies
@@ -22,7 +22,7 @@ const getAll = async (req, res) => {
 const getSingle = async (req, res) => {
     //#swagger.tags=['Companies']
     try {
-        const userId = new ObjetcId(req.params.id);
+        const userId = new ObjectId(req.params.id);
         const result = await mongodb.getDatabase().db().collection('companies').find({ _id: userId});
         result.toArray().then((companies) => {
             res.setHeader('Content-Type', 'application/json');
@@ -70,7 +70,7 @@ const createCompany = async (req, res) => {
 const updateCompany = async (req, res) => {
     //#swagger.tags=['Companies']
     try {
-        const userId = new ObjetcId(req.params.id);
+        const userId = new ObjectId(req.params.id);
         const company = {
             name: req.body.name,
             phone: req.body.phone,   
@@ -95,7 +95,7 @@ const updateCompany = async (req, res) => {
 const deleteCompany = async(req, res) => {
     //#swagger.tags=['Companies']
     try {
-        const userId = new ObjetcId(req.params.id);
+        const userId = new ObjectId(req.params.id);
         const response = await mongodb.getDatabase().db().collection('companies').deleteOne({ _id: userId});
         if (response.deletedCount > 0) {
             res.status(204).send();
