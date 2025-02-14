@@ -12,6 +12,8 @@ router.get("/:id", contactsController.getSingle); // ✅ Coincide con el control
 // POST: Crear un contacto (requiere autenticación)
 router.post("/", authMiddleware, contactsController.createContact);
 
+router.get('/type/:type/', contactsController.findByType);
+
 // PUT: Actualizar un contacto (requiere autenticación)
 router.put("/:id", authMiddleware, contactsController.updateContact);
 

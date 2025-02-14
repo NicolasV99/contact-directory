@@ -1,6 +1,7 @@
 //const { application } = require('express');
 const mongodb = require('../data/database');
-const ObjetcId = require('mongodb').ObjectId;
+const { insertContact } = require('./contacts');
+const ObjectId = require('mongodb').ObjectId;
 
 
 // Functions for Clients
@@ -21,7 +22,7 @@ const getAll = async (req, res) => {
 const getSingle = async (req, res) => {
     //#swagger.tags=['Clients']
     try {
-        const userId = new ObjetcId(req.params.id);
+        const userId = new ObjectId(req.params.id);
         const result = await mongodb.getDatabase().db().collection('clients').find({ _id: userId});
         result.toArray().then((clients) => {
             res.setHeader('Content-Type', 'application/json');
@@ -44,6 +45,15 @@ const createClient = async (req, res) => {
         };
         const response = await mongodb.getDatabase().db().collection('clients').insertOne(client);
         if (response.acknowledged) {
+            const contact = {
+                body: {
+                    name: client.name,
+                    phone: client.phone,
+                    email: client.email,
+                    type: 'client',
+                }
+            };
+            await insertContact(contact);
             res.status(204).send();
         } else {
             res.status(500).json(response.error || 'Some error ocurred while updating the client');
@@ -57,7 +67,7 @@ const createClient = async (req, res) => {
 const updateClient = async (req, res) => {
     //#swagger.tags=['Clients']
     try {
-        const userId = new ObjetcId(req.params.id);
+        const userId = new ObjectId(req.params.id);
         const client = {
             name: req.body.name,
             phone: req.body.phone,   
@@ -76,10 +86,27 @@ const updateClient = async (req, res) => {
     }
 };
 
+const updateClientOrder = async(req, res) => {
+    //#swagger.tags=['Clients']
+    try {
+        const userId = new ObjectId(req.params.id);
+        const update = {$set: { pastOrders: req.body.pastOrders }};
+        const response = await mongodb.getDatabase().db().collection('clients').updateOne({ _id: userId }, update);
+        if (response.modifiedCount > 0) {
+            res.status(204).send();
+        } else {
+            res.status(500).json(response.error || 'Some error ocurred while updating the client');
+        }
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: 'Some error occurred while updating the client' });
+    }
+};
+
 const deleteClient = async(req, res) => {
     //#swagger.tags=['Clients']
     try {
-        const userId = new ObjetcId(req.params.id);
+        const userId = new ObjectId(req.params.id);
         const response = await mongodb.getDatabase().db().collection('clients').deleteOne({ _id: userId});
         if (response.deletedCount > 0) {
             res.status(204).send();
@@ -98,5 +125,6 @@ module.exports = {
     getSingle,
     createClient,
     updateClient,
-    deleteClient
+    deleteClient,
+    updateClientOrder
 };

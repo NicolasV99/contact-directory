@@ -9,6 +9,7 @@ router.get('/', clientsController.getAll);
 router.get('/:id', clientsController.getSingle);
 router.post('/', clientsController.createClient);
 router.put('/:id', clientsController.updateClient);
+router.put('/pastOrders/:id/', clientsController.updateClientOrder);
 router.delete('/:id', clientsController.deleteClient);
 
 
