@@ -4,7 +4,8 @@
   "description": "Contact Directory Project",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node middleware/startServer.js",
+    "test": "set NODE_ENV=test && jest --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -29,5 +30,9 @@
     "passport-google-oauth20": "^2.0.0",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
   }
 }

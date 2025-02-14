@@ -28,8 +28,15 @@ const getDatabase = () => {
     return database;
 }
 
+const closeDb = async () => {
+    if (database) {
+        await database.close();
+    }
+};
+
 module.exports = {
     initDb,
-    getDatabase
+    getDatabase,
+    closeDb
 };
 
