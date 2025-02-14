@@ -6,12 +6,12 @@ const doc = {
         title: "Contact Directory API",
         description: "API to manage a contact directory",
     },
-    host: "localhost:3000",
-    schemes: ["http"],
+    host: "contact-directory-17pq.onrender.com",
+    schemes: ["https"],
     components: {
         securitySchemes: {
             bearerAuth: {
-                type: "http",
+                type: "https",
                 scheme: "bearer",
                 bearerFormat: "JWT",
             },
