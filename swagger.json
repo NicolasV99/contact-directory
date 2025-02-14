@@ -5,10 +5,10 @@
     "description": "API to manage a contact directory",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "contact-directory-17pq.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/": {
